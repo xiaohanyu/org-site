@@ -22,7 +22,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Commentary:
-;; this file defines a basic configuration template for a org-site project. Each
+;; This file defines a basic configuration template for a org-site project. Each
 ;; org-site project should contains this file. When you create a new org-site
 ;; project using `org-site-new-project`, this file will be copied to that
 ;; org-site project's directory. When you load a org-site project using

@@ -66,8 +66,24 @@ org-site configuration file to the project's directory"
           (make-directory "wiki")
           (copy-file (expand-file-name "org-site-config.el"
                                        org-site-load-directory)
-                     project-directory))
-      (cd old-default-directory)))
+                     project-directory)
+          (org-site-new-org-file
+           (expand-file-name "index.org"
+                             project-directory)
+           nil)
+          (org-site-new-org-file
+           (expand-file-name "about.org"
+                             project-directory)
+           nil)
+          (org-site-new-org-file
+           (expand-file-name "post/post1.org"
+                             project-directory)
+           nil)
+          (org-site-new-org-file
+           (expand-file-name "wiki/wiki1.org"
+                             project-directory)
+           nil)
+      (cd old-default-directory))))
 
   (defun load-project (&optional project-directory)
     "Load the project settings and make org-site know its current project."
@@ -94,12 +110,48 @@ org-site configuration file to the project's directory"
                        org-site-load-directory)))
 
   (defun get-org-file-title (org-file)
+    "Get org file title based on contents or filename.
+
+Org-mode has a `org-publish-find-title` function, but this function has some
+minor problems with `org-publish-cache`."
     (with-temp-buffer
       (insert-file-contents org-file)
       (setq opt-plist (org-infile-export-plist))
       (or (plist-get opt-plist :title)
           (file-name-sans-extension
            (file-name-nondirectory filename)))))
+
+  (defun new-org-file (org-file &optional view-org-file)
+    "Find a new org-file and insert some basic org options.
+
+if `view-org-file` is non-nil, switch to that buffer, else, kill that buffer."
+    (if (file-exists-p org-file)
+        (error "File already exists, please type a new file."))
+    (let ((buffer (find-file-noselect org-file)))
+      (set-buffer buffer)
+      (org-insert-export-options-template)
+      (save-buffer)
+      (if view-org-file
+          (switch-to-buffer buffer)
+        (kill-buffer buffer))))
+
+  (defun new-post (org-file)
+    (interactive
+     (list (read-file-name
+            "file name: "
+            (file-name-as-directory
+             (expand-file-name "post"
+                               org-site-project-directory)))))
+    (new-org-file org-file))
+
+  (defun new-wiki (org-file)
+    (interactive
+     (list (read-file-name
+            "file name: "
+            (file-name-as-directory
+             (expand-file-name "wiki"
+                               org-site-project-directory)))))
+    (new-org-file org-file))
 
   (defun render (template context)
     (mustache-file-render
