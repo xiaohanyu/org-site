@@ -56,7 +56,9 @@ TODO:
            (absolute-org-files (org-site-publish-get-base-files sub-dir)))
       (setq title-path-org-files
             (mapcar (lambda (filename)
-                      (cons (s-chop-prefix sub-dir filename)
+                      (cons (concat site-sub-dir
+                                    "/"
+                                    (s-chop-prefix sub-dir filename))
                             (org-site-get-org-file-title filename)))
                     absolute-org-files))
       (with-temp-buffer
