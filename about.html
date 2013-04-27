@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>org-site: static site generator based on Emacs Org-mode</title>
+    <base href="http://xiaohanyu.github.io/org-site/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- CSS -->
+    <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+
+      /* Sticky footer styles
+      -------------------------------------------------- */
+
+      html,
+      body {
+        height: 100%;
+        /* The html and body elements cannot have any padding or margin. */
+      }
+
+      /* Wrapper for page content to push down footer */
+      #wrap {
+        min-height: 100%;
+        height: auto !important;
+        height: 100%;
+        /* Negative indent footer by it's height */
+        margin: 0 auto -60px;
+      }
+
+      /* Set the fixed height of the footer here */
+      #push,
+      #footer {
+        height: 60px;
+      }
+      #footer {
+        background-color: #f5f5f5;
+      }
+
+      /* Lastly, apply responsive CSS fixes as necessary */
+      @media (max-width: 767px) {
+        #footer {
+          margin-left: -20px;
+          margin-right: -20px;
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+      }
+
+
+
+      /* Custom page CSS
+      -------------------------------------------------- */
+      /* Not required for template or sticky footer method. */
+
+      #wrap > .container {
+        padding-top: 60px;
+      }
+      .container .credit {
+        margin: 20px 0;
+      }
+
+      code {
+        font-size: 80%;
+      }
+
+    </style>
+    <link href="static/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <!-- <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png"> -->
+    <!-- <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png"> -->
+    <!-- <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png"> -->
+    <!-- <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png"> -->
+    <!-- <link rel="shortcut icon" href="../assets/ico/favicon.png"> -->
+  </head>
+
+  <body>
+    <!-- Part 1: Wrap all page content here -->
+    <div id="wrap">
+
+      <!-- Fixed navbar -->
+
+      <div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href=".">Org-Site</a>
+      <div class="nav-collapse collapse">
+        <ul class="nav">
+          <li><a href="post/" class="menu">Post</a></li>
+          <li><a href="wiki/" class="menu">Wiki</a></li>
+          <li><a href="tags/" class="menu">Tags</a></li>
+          <li><a href="about.html" class="menu">About</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+      <!-- Begin page content -->
+      <div class="container">
+        <h1>org-site: static site generator based on Emacs Org-mode</h1><div id="outline-container-1" class="outline-2">
+<h2 id="sec-1">Introduction</h2>
+<div class="outline-text-2" id="text-1">
+
+<p>  Org-site is a static site generator based on Emacs <a href="http://orgmode.org">org-mode</a>.
+</p>
+<p>
+  It's not designed to be a so-called static blog generator, however, org-site will support some simple wiki-like site generation.
+</p>
+<p>
+  Features of org-site:
+</p><ol>
+<li>A convenient workflow without leaving Emacs
+</li>
+<li>Flexible template and theme design, with a default twitter <a href="http://twitter.github.com/bootstrap/">bootstrap</a> theme
+</li>
+<li>Automatic index page generation
+</li>
+<li>Commenting using disqus
+</li>
+<li>Easily switching between multiple org-site projects
+</li>
+</ol>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2">Installation</h2>
+<div class="outline-text-2" id="text-2">
+
+
+</div>
+
+<div id="outline-container-2-1" class="outline-3">
+<h3 id="sec-2-1">Install libs</h3>
+<div class="outline-text-3" id="text-2-1">
+
+<p>   Org-site depends some extra elisp libraries, to install these dependencies, I recommand you install <a href="https://github.com/dimitri/el-get">el-get</a> first, and then evaluate the following elisp code in <code>*scratch*</code> buffer by  typing <code>C-j</code>, <code>C-x C-e</code> or <code>M-x eval-print-last-exp</code>:
+</p>
+<pre class="example">
+(dolist (lib '(dash ht s loop with-namespace mustache))
+ (el-get-install lib))
+</pre>
+
+
+<p>
+   Then add the following code to your <code>.emacs</code>:
+</p>
+<pre class="example">
+(add-to-list 'load-path (expand-file-name
+                         "~/.emacs.d/el-get/dash"))
+(add-to-list 'load-path (expand-file-name
+                         "~/.emacs.d/el-get/ht"))
+(add-to-list 'load-path (expand-file-name
+                         "~/.emacs.d/el-get/loop"))
+(add-to-list 'load-path (expand-file-name
+                         "~/.emacs.d/el-get/mustache"))
+(add-to-list 'load-path (expand-file-name
+                         "~/.emacs.d/el-get/s"))
+(add-to-list 'load-path (expand-file-name
+                         "~/.emacs.d/el-get/with-namespace"))
+</pre>
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2-2" class="outline-3">
+<h3 id="sec-2-2">Install org-site</h3>
+<div class="outline-text-3" id="text-2-2">
+
+<p>   OK, well done, let's install org-site.
+</p>
+<pre class="example">
+git clone git://github.com/xiaohanyu/org-site.git
+</pre>
+
+
+<p>
+   Add org-site to your load path
+</p>
+<pre class="example">
+(add-to-list 'load-path (expand-file-name
+                         "/your/path/to/org-site"))
+
+(require 'org-site)
+</pre>
+
+
+<p>
+   That's all, now let's create our first org-site.
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3">Usage</h2>
+<div class="outline-text-2" id="text-3">
+
+<p>  Org-site provides following shortcut commands to facilitate your workflow:
+</p><ul>
+<li><code>org-site-new-project</code>: create a new org-site project.
+</li>
+<li><code>org-site-load-project</code>: load an existing org-site project and set it to the current org-site project.
+</li>
+<li><code>org-site-new-post</code>: create a new post page.
+</li>
+<li><code>org-site-new-wiki</code>: create a new wiki page.
+</li>
+<li><code>org-site-publish</code>: publish org-site to html site, other formats like pdf will be supported in future.
+</li>
+</ul>
+
+
+<p>
+  The basic workflow is <code>org-site-new-project</code> or <code>org-site-load-project</code>, then <code>org-site-new-post</code>, <code>org-site-new-wiki</code>, and then finally <code>org-site-publish</code>, that's it.
+</p>
+
+</div>
+
+<div id="outline-container-3-1" class="outline-3">
+<h3 id="sec-3-1">Org-site internals</h3>
+<div class="outline-text-3" id="text-3-1">
+
+
+</div>
+
+<div id="outline-container-3-1-1" class="outline-4">
+<h4 id="sec-3-1-1">The basic directory structure of org-site project</h4>
+<div class="outline-text-4" id="text-3-1-1">
+
+<p>    When you <code>org-site-new-project</code>, you will get the following directory structure:
+</p>
+<pre class="example">
+about.org     # about page of your site
+index.org     # index page of your site
+org-site-config.el    # org-site project config file
+post          # post directory
+wiki          # wiki directory
+</pre>
+
+
+<p>
+    In <code>org-site-config.el</code>, you should set your basic information about your site, such as site url, site title, author name and email, disqus url/identifier, etc.
+</p>
+<p>
+    There're two types of page in <code>org-site</code>, post and wiki. Generally, posts are updated one by one, while wikis are updated little by little. Later version of <code>org-site</code> will add some more flexible feature support and differentiation to these two different pages, but currently <code>org-site</code> treat them different but handle them the same.
+</p>
+
+</div>
+
+</div>
+
+<div id="outline-container-3-1-2" class="outline-4">
+<h4 id="sec-3-1-2">Things about code</h4>
+<div class="outline-text-4" id="text-3-1-2">
+
+<p>    <code>org-site</code> is based heavily on <code>org-mode</code>, expecially on <code>org-publish</code> and <code>org-export-as-*</code>. Internally, <code>org-site</code> do some monkey patching to <code>org-export-as-*</code> to support <code>mustache</code> template rendering, thus provide a flexible theme and customization support.
+</p>
+</div>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4">Dependencies</h2>
+<div class="outline-text-2" id="text-4">
+
+<ol>
+<li><a href="http://www.gnu.org/software/emacs/">Emacs</a>: Of course it needs Emacs
+</li>
+<li><a href="http://orgmode.org/">Org mode</a>: Another of course
+</li>
+<li><a href="https://github.com/Wilfred/mustache.el">mustache.el</a>: org-site use <a href="http://mustache.github.io/">mustache</a> as its template render engine.
+</li>
+</ol>
+
+
+<p>
+  And <code>mustache.el</code> depends following libs, so:
+</p><ol>
+<li><a href="https://github.com/Wilfred/ht.el">ht.el</a>: The missing hash table utility library for Emacs.
+</li>
+<li><a href="https://github.com/Wilfred/loop.el">loop.el</a>: friendly imperative loop structures for Emacs lisp
+</li>
+<li><a href="https://github.com/magnars/s.el">s.el</a>: The long lost Emacs string manipulation library.
+</li>
+<li><a href="https://github.com/Wilfred/with-namespace.el">with-namespace.el</a>: interoperable elisp namespaces
+</li>
+<li><a href="https://github.com/magnars/dash.el">dash.el</a>: A modern list library for Emacs. This is required by <code>mustache.el</code>, not by <code>org-site</code> directly.
+</li>
+</ol>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5">Todo</h2>
+<div class="outline-text-2" id="text-5">
+
+
+
+</div>
+
+<div id="outline-container-5-1" class="outline-3">
+<h3 id="sec-5-1">Feature enhancement</h3>
+<div class="outline-text-3" id="text-5-1">
+
+<ul>
+<li>Add exportable pdf support
+</li>
+<li>RSS export
+</li>
+<li>Customizable TOC(Table of Contents)
+</li>
+<li>Sidebar?
+</li>
+<li>Org-mode code weave/tangle to support literate programming
+</li>
+<li>A copiable, collapsible code block
+</li>
+<li>Configurable org html source
+</li>
+<li>Some more theme?
+</li>
+<li>Site statistics, gravatar, etc.
+</li>
+<li>Post Category/Tag support
+</li>
+<li>Math/TeX/MathJax test and support
+</li>
+<li>Localhost/Production support?
+</li>
+<li>Search engine support
+</li>
+</ul>
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-5-2" class="outline-3">
+<h3 id="sec-5-2">Project enhancement</h3>
+<div class="outline-text-3" id="text-5-2">
+
+<ul>
+<li>Add an impressive(I hope that) github page generated by <code>org-site</code> itself, yeah.
+</li>
+<li>Documentation work.
+</li>
+<li>TDD support based on elisp <a href="http://www.gnu.org/software/emacs/manual/html_node/ert/index.html">ERT</a>?
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+<p><br/><br/>
+<!-- hhmts start --> <!-- hhmts end --></p>
+
+        <div id="push"></div>
+      </div>
+
+    </div>
+    <div id="footer">
+      <div class="container">
+
+
+
+
+<p class="muted credit">
+  Generated by <a href="http://github.com/xiaohanyu/org-site/">org-site</a>, <a href="mailto:xiaohanyu1988@gmail.com">Xiao Hanyu</a>
+</p>
+
+
+      </div>
+    </div>
+  </body>
+</html>
