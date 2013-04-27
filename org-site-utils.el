@@ -162,10 +162,10 @@ if `view-org-file` is non-nil, switch to that buffer, else, kill that buffer."
     (let ((context
            (ht-from-plist
             `("site-title" ,org-site-title
-              "nav-post" "/post/"
-              "nav-wiki" "/wiki/"
-              "nav-tags" "/tags/"
-              "nav-about" "/about.html"))))
+              "nav-post" "post/"
+              "nav-wiki" "wiki/"
+              "nav-tags" "tags/"
+              "nav-about" "about.html"))))
       (org-site-render "preamble.html" context)))
 
   (defun generate-comment ()

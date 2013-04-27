@@ -87,6 +87,7 @@ disabled outside `org-site-publish`."
     (let ((context
            (ht-from-plist
             `("title" ,title
+              "org-site-url" ,org-site-url
               "preamble" ,preamble
               "content" ,content
               "postamble" ,postamble))))
