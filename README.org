@@ -19,36 +19,43 @@
 ** Install libs
    Org-site depends some extra elisp libraries, to install these dependencies, I recommand you install [[https://github.com/dimitri/el-get][el-get]] first, and then evaluate the following elisp code in =*scratch*= buffer by  typing =C-j=, =C-x C-e= or =M-x eval-print-last-exp=:
 
-   : (dolist (lib '(dash ht s loop with-namespace mustache))
-   :  (el-get-install lib))
+#+BEGIN_EXAMPLE
+(dolist (lib '(dash ht s loop with-namespace mustache))
+ (el-get-install lib))
+#+END_EXAMPLE
 
    Then add the following code to your =.emacs=:
 
-   : (add-to-list 'load-path (expand-file-name
-   :                          "~/.emacs.d/el-get/dash"))
-   : (add-to-list 'load-path (expand-file-name
-   :                          "~/.emacs.d/el-get/ht"))
-   : (add-to-list 'load-path (expand-file-name
-   :                          "~/.emacs.d/el-get/loop"))
-   : (add-to-list 'load-path (expand-file-name
-   :                          "~/.emacs.d/el-get/mustache"))
-   : (add-to-list 'load-path (expand-file-name
-   :                          "~/.emacs.d/el-get/s"))
-   : (add-to-list 'load-path (expand-file-name
-   :                          "~/.emacs.d/el-get/with-namespace"))
-
+#+BEGIN_EXAMPLE
+(add-to-list 'load-path (expand-file-name
+                         "~/.emacs.d/el-get/dash"))
+(add-to-list 'load-path (expand-file-name
+                         "~/.emacs.d/el-get/ht"))
+(add-to-list 'load-path (expand-file-name
+                         "~/.emacs.d/el-get/loop"))
+(add-to-list 'load-path (expand-file-name
+                         "~/.emacs.d/el-get/mustache"))
+(add-to-list 'load-path (expand-file-name
+                         "~/.emacs.d/el-get/s"))
+(add-to-list 'load-path (expand-file-name
+                         "~/.emacs.d/el-get/with-namespace"))
+#+END_EXAMPLE
 
 ** Install org-site
    OK, well done, let's install org-site.
 
-   : git clone git://github.com/xiaohanyu/org-site.git
+#+BEGIN_EXAMPLE
+git clone git://github.com/xiaohanyu/org-site.git
+#+END_EXAMPLE
 
    Add org-site to your load path
 
-   : (add-to-list 'load-path (expand-file-name
-   :                          "/your/path/to/org-site"))
-   :
-   : (require 'org-site)
+#+BEGIN_EXAMPLE
+(add-to-list 'load-path (expand-file-name
+                         "/your/path/to/org-site"))
+
+(require 'org-site)
+#+END_EXAMPLE
 
    That's all, now let's create our first org-site.
 
@@ -66,11 +73,13 @@
 *** The basic directory structure of org-site project
     When you =org-site-new-project=, you will get the following directory structure:
 
-    : about.org		# about page of your site
-    : index.org		# index page of your site
-    : org-site-config.el	# org-site project config file
-    : post			# post directory
-    : wiki			# wiki directory
+#+BEGIN_EXAMPLE
+about.org		# about page of your site
+index.org		# index page of your site
+org-site-config.el	# org-site project config file
+post			# post directory
+wiki			# wiki directory
+#+END_EXAMPLE
 
     In =org-site-config.el=, you should set your basic information about your site, such as site url, site title, author name and email, disqus url/identifier, etc.
 
