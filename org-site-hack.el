@@ -65,7 +65,8 @@ disabled outside `org-site-publish`."
                       (file-name-nondirectory buffer-file-name))
                      "." html-extension)))
          ; Avoid any auto-insert stuff for the new file
-         (auto-insert nil))
+         (auto-insert nil)
+         (base-url nil))
 
     ad-do-it
     (setq content (concat (format "<h1>%s</h1>" title)
@@ -84,10 +85,14 @@ disabled outside `org-site-publish`."
     (and (fboundp 'set-buffer-file-coding-system)
          (set-buffer-file-coding-system coding-system-for-write))
 
+    (if (s-matches? "localhost" org-site-url)
+        (setq base-url "/")
+      (setq base-url org-site-url))
+
     (let ((context
            (ht-from-plist
             `("title" ,title
-              "org-site-url" ,org-site-url
+              "base-url" ,base-url
               "preamble" ,preamble
               "content" ,content
               "postamble" ,postamble))))

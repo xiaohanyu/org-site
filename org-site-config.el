@@ -37,7 +37,12 @@
     "title for your org-site")
 
   (defconst url "your.personal.org.site"
-    "url of your org-site")
+    "url of your org-site
+
+This variable is very important to your org-site. It is the base url of all your
+org-site html links. If you want to preview in localhost, just set it with
+localhost, if you want to publish your org-site to public, then keep consistency
+with your real site url.")
 
   (defconst theme "bootstrap"
     "theme for your org-site")
