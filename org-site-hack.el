@@ -40,7 +40,7 @@ disabled outside `org-site-publish`."
   (let* ((preamble (org-site-generate-preamble))
          (postamble (org-site-generate-postamble))
          (to-buffer 'string)
-         (body-only t)
+         (body-only nil)
          (opt-plist
           (org-export-process-option-filters
            (org-combine-plists (org-default-export-plist)
