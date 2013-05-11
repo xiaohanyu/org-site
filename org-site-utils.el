@@ -27,6 +27,7 @@
 ;; 2. template loader and render functions, inspired by Django
 ;; 3. preamble/footer/postamble generators
 
+(require 'cl)
 
 (require 'ht)
 (require 'mustache)
@@ -46,6 +47,46 @@
 Actually, this function is a shortcut function inspired by Django's
 render_to_response."
   (mustache-render (file-to-string file) context))
+
+(defun org-html-get-body (org-html)
+  "Get the \"<body>...</body>\" from org-html string.
+
+`ORG-HTML' is the exported html string of a org file."
+  (let ((body-regexp "<body>\\(.\\|\n\\)*</body>"))
+    (car (s-match body-regexp org-html))))
+
+(defun org-html-get-body-toc (org-html)
+  "Get the toc node from html <body>.
+
+`ORG-HTML' is the exported html string of a org file.
+
+We just get the <div> with id \"table-of-contents\", which has a preconfigured
+toc title \"Table of Contents\". Additional string manipulation is needed if
+customizable toc title is needed"
+  (let ((org-html-body (org-html-get-body org-html))
+        (toc-regexp "<div id=\"table-of-.*\">\\(.\\|\n\\)*?</div>\n</div>"))
+    (car (s-match toc-regexp org-html-body))))
+
+(defun org-html-get-body-content (org-html)
+  "Get the content node without toc from html <body>.
+
+`ORG-HTML' is the exported html string of a org file.
+
+First, you need to get the full content dom node, then you substract the toc
+node from the content dom node. Lots of dirty code and tricks here, any better
+ideas?"
+  (let ((org-html-body (org-html-get-body org-html))
+        (body-regexp "</?body?>")
+        (title-regexp "<h1 class=\"title\">.*?</h1>")
+        (toc-regexp "<div id=\"table-of-.*\">\\(.\\|\n\\)*?</div>")
+        (text-toc-regexp "<div id=\"text-table-of-.*\">\\(.\\|\n\\)*?</div>"))
+    (s-trim
+     (reduce
+     #'(lambda (regexp string)
+         (replace-regexp-in-string regexp "" string))
+     (list body-regexp title-regexp toc-regexp text-toc-regexp)
+     :initial-value org-html-body
+     :from-end t))))
 
 (with-namespace "org-site"
   (defun new-project (&optional project-directory)

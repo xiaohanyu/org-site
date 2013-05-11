@@ -96,6 +96,10 @@
 
       <!-- Begin page content -->
       <div class="container">
+        <h1>{{title}}</h1>
+        {{#enable-toc}}
+          {{& toc}}
+        {{/enable-toc}}
         {{& content}}
         <div id="push"></div>
       </div>

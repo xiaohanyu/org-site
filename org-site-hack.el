@@ -69,8 +69,9 @@ disabled outside `org-site-publish`."
          (base-url nil))
 
     ad-do-it
-    (setq content (concat (format "<h1>%s</h1>" title)
-                          (substring-no-properties (car kill-ring))))
+    (setq org-html (substring-no-properties (car kill-ring)))
+    (setq content (org-html-get-body-content org-html))
+    (setq toc (org-html-get-body-toc org-html))
 
     (setq ftname
           (concat (file-name-as-directory pub-dir)
@@ -96,6 +97,10 @@ disabled outside `org-site-publish`."
               "preamble" ,preamble
               "content" ,content
               "postamble" ,postamble))))
+      (ht-set context "enable-toc"
+              (if org-site-enable-toc
+                  (list (ht-from-plist `("toc" ,toc)))
+                nil))
       (insert (org-site-render "page.html" context)))
 
     (save-buffer)
