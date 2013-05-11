@@ -80,4 +80,9 @@ with your real site url.")
 
   ;;; org-publish settings
   (defconst html-publish-dir "~/tmp/org-site-publish"
-    "publishing directory for html files"))
+    "publishing directory for html files")
+
+  ;;; debug mode support
+  (defconst debug t
+    "set org-site in debug state, which means org-site will keep the
+  auto-generated index org files after publishing"))

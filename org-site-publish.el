@@ -76,7 +76,8 @@ TODO:
     (let* ((sub-dir (file-name-as-directory
                      (expand-file-name site-sub-dir base-dir)))
            (sub-index (expand-file-name "index.org" sub-dir)))
-      (delete-file sub-index)))
+      (unless org-site-debug
+        (delete-file sub-index))))
 
   (defun publish (project-dir &optional force)
     "This function will publish your site to necessary output result,
