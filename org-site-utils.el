@@ -88,6 +88,28 @@ ideas?"
      :initial-value org-html-body
      :from-end t))))
 
+;; This function is inspired by org-website-get-file-property from org-website
+;; package, see https://github.com/renard/org-website
+;; I do some refactoring to make it suite for org-site
+;; org-site need this to provide TAGS/CATEGORY support
+(defun org-org-get-file-properties (org-file)
+  "Return a property dict of ORG-FILE.
+
+Org file could contains lots of \"#+\...\" properties, which could be used to
+control exporting actions, provide document metainfo, etc. This function will
+read all the properties and turn it into a property dict."
+  (let ((org-file-string-list
+         (s-lines (file-to-string "README.org")))
+        (prop-regexp "^#\\+\\(.*?\\):[ \t]+\\(.*\\)")
+        (prop-dict (ht-create)))
+    (dolist (line org-file-string-list)
+      (setq match-data (s-match prop-regexp line))
+      (setq prop-key (nth 1 match-data))
+      (setq prop-value (nth 2 match-data))
+      (ht-set prop-dict prop-key prop-value))
+    (ht-remove prop-dict nil)
+    prop-dict))
+
 (with-namespace "org-site"
   (defun new-project (&optional project-directory)
     "Create a new org-site project.
