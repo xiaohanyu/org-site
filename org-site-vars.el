@@ -1,27 +1,34 @@
-;;; org-site-vars.el --- the minimal initial global variable needed by org-site
-;; Copyright (C) 2006-2013 Free Software Foundation, Inc.
+;;; org-site-vars.el --- the minimum global variables required by org-site
 
-;; Author: Xiao Hanyu <xiaohanyu1988 AT gmail DOT com>
-;; Keywords: org-mode, site-generator
+;; Copyright (C) 2013 Xiao Hanyu
+
+;; Author: Xiao Hanyu <xiaohanyu1988@gmail.com>
 ;; Version: 0.01
+;; Keywords: org-mode, site-generator
+;; URL: http://github.com/xiaohanyu/org-site
 
 ;; This file is not part of GNU Emacs.
-;;
-;; GNU Emacs is free software: you can redistribute it and/or modify
+
+;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 
-;; GNU Emacs is distributed in the hope that it will be useful,
+;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 ;;; Commentary:
+
+;; This file defines the minimum variables required by org-site, other necessary
+;; variables and configurations are loaded through seperate site config file
+;; org-site-config.el
+
+;;; Code:
 
 
 (defgroup org-site nil
@@ -37,3 +44,4 @@
   "The current org-site project directory.")
 
 (provide 'org-site-vars)
+;;; org-site-vars.el ends here

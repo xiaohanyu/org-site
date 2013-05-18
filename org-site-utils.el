@@ -1,31 +1,35 @@
 ;;; org-site-utils.el --- various utils for org-site
-;; Copyright (C) 2006-2013 Free Software Foundation, Inc.
 
-;; Author: Xiao Hanyu <xiaohanyu1988 AT gmail DOT com>
-;; Keywords: org-mode, site-generator
+;; Copyright (C) 2013 Xiao Hanyu
+
+;; Author: Xiao Hanyu <xiaohanyu1988@gmail.com>
 ;; Version: 0.01
+;; Keywords: org-mode, site-generator
+;; URL: http://github.com/xiaohanyu/org-site
 
 ;; This file is not part of GNU Emacs.
-;;
-;; GNU Emacs is free software: you can redistribute it and/or modify
+
+;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 
-;; GNU Emacs is distributed in the hope that it will be useful,
+;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 ;;; Commentary:
+
 ;; This file contains various utility functions for org-site:
 ;; 1. project create and load functions
 ;; 2. template loader and render functions, inspired by Django
 ;; 3. preamble/footer/postamble generators
+
+;;; Code:
 
 (require 'cl)
 
@@ -51,14 +55,14 @@ render_to_response."
 (defun org-html-get-body (org-html)
   "Get the \"<body>...</body>\" from org-html string.
 
-`ORG-HTML' is the exported html string of a org file."
+ORG-HTML is the exported html string of a org file."
   (let ((body-regexp "<body>\\(.\\|\n\\)*</body>"))
     (car (s-match body-regexp org-html))))
 
 (defun org-html-get-body-toc (org-html)
   "Get the toc node from html <body>.
 
-`ORG-HTML' is the exported html string of a org file.
+ORG-HTML is the exported html string of a org file.
 
 We just get the <div> with id \"table-of-contents\", which has a preconfigured
 toc title \"Table of Contents\". Additional string manipulation is needed if
@@ -70,7 +74,7 @@ customizable toc title is needed"
 (defun org-html-get-body-content (org-html)
   "Get the content node without toc from html <body>.
 
-`ORG-HTML' is the exported html string of a org file.
+ORG-HTML is the exported html string of a org file.
 
 First, you need to get the full content dom node, then you substract the toc
 node from the content dom node. Lots of dirty code and tricks here, any better
@@ -175,8 +179,8 @@ org-site configuration file to the project's directory"
   (defun get-org-file-title (org-file)
     "Get org file title based on contents or filename.
 
-Org-mode has a `org-publish-find-title` function, but this function has some
-minor problems with `org-publish-cache`."
+Org-mode has a `org-publish-find-title' function, but this function has some
+minor problems with `org-publish-cache'."
     (with-temp-buffer
       (insert-file-contents org-file)
       (setq opt-plist (org-infile-export-plist))
@@ -187,7 +191,7 @@ minor problems with `org-publish-cache`."
   (defun new-org-file (org-file &optional view-org-file)
     "Find a new org-file and insert some basic org options.
 
-if `view-org-file` is non-nil, switch to that buffer, else, kill that buffer."
+If VIEW-ORG-FILE is non-nil, switch to that buffer, else, kill that buffer."
     (if (file-exists-p org-file)
         (error "File already exists, please type a new file."))
     (let ((buffer (find-file-noselect org-file)))
@@ -270,3 +274,4 @@ if `view-org-file` is non-nil, switch to that buffer, else, kill that buffer."
       (org-site-render "postamble.html" context))))
 
 (provide 'org-site-utils)
+;;; org-site-utils.el ends here

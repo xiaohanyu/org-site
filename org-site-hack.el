@@ -1,42 +1,46 @@
 ;;; org-site-hack.el --- some hacked org-export-as-* for org-site
-;; Copyright (C) 2006-2013 Free Software Foundation, Inc.
 
-;; Author: Xiao Hanyu <xiaohanyu1988 AT gmail DOT com>
-;; Keywords: org-mode, site-generator
+;; Copyright (C) 2013 Xiao Hanyu
+
+;; Author: Xiao Hanyu <xiaohanyu1988@gmail.com>
 ;; Version: 0.01
+;; Keywords: org-mode, site-generator
+;; URL: http://github.com/xiaohanyu/org-site
 
 ;; This file is not part of GNU Emacs.
-;;
-;; GNU Emacs is free software: you can redistribute it and/or modify
+
+;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 
-;; GNU Emacs is distributed in the hope that it will be useful,
+;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 ;;; Commentary:
+
 ;; This file will contains various hacked org-export-as-* functions for
-;; org-site. Currently, only `org-export-as-html` is hacked. The hacked
-;; `org-export-as-html` support org-site mustache template load and render.
+;; org-site. Currently, only `org-export-as-html' is hacked. The hacked
+;; `org-export-as-html' support org-site mustache template load and render.
+
+;;; Code:
 
 (require 'org-html)
 
 (require 'org-site-utils)
 
 (defadvice org-export-as-html (around org-site-export-as-html disable)
-  "A hacked `org-export-as-html` for org-site.
+  "A hacked `org-export-as-html' for org-site.
 
 This function is monkey-patched to support mustache template load and render. It
-contains some code copied of modified from upstream `org-mode`. This
-monkey-patched function will only be used by `org-site-publish`, and will be
-disabled outside `org-site-publish`."
+contains some code copied of modified from upstream `org-mode'. This
+monkey-patched function will only be used by `org-site-publish', and will be
+disabled outside `org-site-publish'."
   (let* ((preamble (org-site-generate-preamble))
          (postamble (org-site-generate-postamble))
          (to-buffer 'string)
@@ -107,3 +111,4 @@ disabled outside `org-site-publish`."
     (kill-buffer (current-buffer))))
 
 (provide 'org-site-hack)
+;;; org-site-hack.el ends here

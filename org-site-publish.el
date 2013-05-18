@@ -1,29 +1,33 @@
 ;;; org-site-publish.el --- publish related org-mode files as a website
-;; Copyright (C) 2006-2013 Free Software Foundation, Inc.
 
-;; Author: Xiao Hanyu <xiaohanyu1988 AT gmail DOT com>
-;; Keywords: org-mode, site-generator
+;; Copyright (C) 2013 Xiao Hanyu
+
+;; Author: Xiao Hanyu <xiaohanyu1988@gmail.com>
 ;; Version: 0.01
+;; Keywords: org-mode, site-generator
+;; URL: http://github.com/xiaohanyu/org-site
 
 ;; This file is not part of GNU Emacs.
-;;
-;; GNU Emacs is free software: you can redistribute it and/or modify
+
+;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 
-;; GNU Emacs is distributed in the hope that it will be useful,
+;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 ;;; Commentary:
+
 ;; This file contains various publishing related functions, and is main
 ;; customized for org-site based on org-publish
+
+;;; Code:
 
 (require 'org-publish)
 
@@ -34,9 +38,9 @@
 
 (with-namespace "org-site"
   (defun publish-get-base-files (base-dir)
-    "Get all org files under `base-dir`
+    "Get all org files under BASE-DIR.
 
-This function actually copy some code from `org-publish-get-base-files`."
+This function actually copy some code from `org-publish-get-base-files'."
     (setq org-sitemap-requested nil)
     (setq org-publish-temp-files nil)
     (setq extension "org")
@@ -83,12 +87,12 @@ TODO:
     "This function will publish your site to necessary output result,
 currentlly, only html publish is supported.
 
-`project-dir` is where your org-site project located.
-if `force` is non-nil, then the project publishing directory will first be
+PROJECT-DIR is where your org-site project located.
+if FORCE is non-nil, then the project publishing directory will first be
 cleared, then the whole org-site project will be republished.
 
-This function is based on `org-publish`, and used org-site's monkey patched
-`org-export-as-html` as html's :publishing-function."
+This function is based on `org-publish', and used org-site's monkey patched
+`org-export-as-html' as html's :publishing-function."
     (interactive
      (list (read-directory-name "Project directory: " org-site-project-directory)
            (y-or-n-p "Force republish all? ")))
@@ -101,7 +105,7 @@ This function is based on `org-publish`, and used org-site's monkey patched
 
     (dolist (sub-dir '("post" "wiki"))
       (org-site-pre-publish project-dir sub-dir))
-    ;; enable and activate the monkey-patched `org-export-as-html`
+    ;; Enable and activate the monkey-patched `org-export-as-html'.
     (ad-enable-advice 'org-export-as-html 'around 'org-site-export-as-html)
     (ad-activate 'org-export-as-html)
     (setq org-publish-project-alist
@@ -149,3 +153,4 @@ This function is based on `org-publish`, and used org-site's monkey patched
       (org-site-post-publish project-dir sub-dir))))
 
 (provide 'org-site-publish)
+;;; org-site-publish.el ends here
