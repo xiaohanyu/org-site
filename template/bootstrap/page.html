@@ -99,10 +99,18 @@
         <div class="page-header">
           <h1>{{title}}</h1>
         </div>
-        {{#enable-toc}}
-          {{& toc}}
-        {{/enable-toc}}
-        {{& content}}
+        <div class="row">
+          <div class="span8">
+            {{& content}}
+          </div>
+          <div class="span4">
+            <div class="well">
+              {{#enable-toc}}
+              {{& toc}}
+              {{/enable-toc}}
+            </div>
+          </div>
+        </div>
         <div id="push"></div>
       </div>
 
