@@ -67,6 +67,7 @@ TODO:
                     absolute-org-files))
       (with-temp-buffer
         (dolist (title-path-pair title-path-org-files)
+          (insert (format "#+TITLE: %ss\n" (capitalize site-sub-dir)))
           (insert (format "- [[file:%s][%s]]\n"
                           (car title-path-pair)
                           (cdr title-path-pair))))
