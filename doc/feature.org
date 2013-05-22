@@ -1,166 +1,191 @@
 #+TITLE: Org-site Features: Design and Implementation Drafts
 
 * Purpose
-
-This document provide a drafts for org-site features design and some elementary
-technical implemenation details. Each feature should have a github issue, which
-would be corelated by future code commitments. The github milestone and git repo
-tags are managed by org-mode's headline tags.
+  This document provide a drafts for org-site features design and some
+  elementary technical implemenation details. Each feature should have a github
+  issue, which would be corelated by future code commitments. The github
+  milestone and git repo tags are managed by org-mode's headline tags.
 
 * Features Design and Implemenation
-** Home page auto generation support
+
+** Ert test for some tool functions
 *** Design
-Currently, the home page of org-site is generated through a user provided
-=index.org= file, this is flexible, while some other people don't like it. They
-need something like blog's home page, which can generate home page contains a
-list of recently published posts. An example see:
-http://freemind.pluskid.org/
+    At first, I just want org-site to work, which means I should come up with a
+    workable projects. Now org-site has hundreds line of code, some of the code
+    is dependent tool functions, which can be unit tested easily. The core of
+    org-site is not easy to test(may need lots of mock and stubs), but the
+    tools function need some basic testing work. Travis CI maybe also be
+    imported in.
 
 *** Implementation
-- Add functions to get the abstract of posts
-- Add functions to aggregate these abstract to form a home page.
+    - Write some ert test for tool functions.
+    - Basic Travis CI support.
+
+** Test with org-mode 8.0
+*** Design
+    Org-mode has reached version 8.0, which is the most disruptive major version
+    of Org(http://orgmode.org/Changes.html). So maybe there're lots
+    incompatibities between current org-site and org-mode 8.0.
+
+*** Implementation
+    First find out whether or not org-site works with org-mode 8.0, if not,
+    find the underline issues and make a compatibily layer.
+
+
+** Home page auto generation support
+*** Design
+    Currently, the home page of org-site is generated through a user provided
+    =index.org= file, this is flexible, while some other people don't like
+    it. They need something like blog's home page, which can generate home page
+    contains a list of recently published posts. An example see:
+    http://freemind.pluskid.org/
+
+*** Implementation
+    - Add functions to get the abstract of posts
+    - Add functions to aggregate these abstract to form a home page.
 
 ** Debug mode support
 *** Design
-org-site will generate some index files during =org-site-publish= process, which
-will be deleted by =org-site-post-publish= process by default. Sometimes, we
-need to keep these generated files for debug purpose, so an extra debug option
-is needed.
+    org-site will generate some index files during =org-site-publish= process,
+    which will be deleted by =org-site-post-publish= process by
+    default. Sometimes, we need to keep these generated files for debug purpose,
+    so an extra debug option is needed.
 
 *** Implementation
-Just add a =org-site-debug= option in =org-site-config.el=, and set it to =nil=
-by default. Check =org-site-debug= in related functions.
+    Just add a =org-site-debug= option in =org-site-config.el=, and set it to
+    =nil= by default. Check =org-site-debug= in related functions.
 
 ** Import design goodies from o-blog
 *** Design
-=o-blog= has a beautilful demo site, which is valuable for =org-site= to steal.
-see http://renard.github.io/o-blog/features.html for a live demo and technical
-details.
+    =o-blog= has a beautilful demo site, which is valuable for org-site to
+    steal. see http://renard.github.io/o-blog/features.html for a live demo and
+    technical details.
 
 *** Implementation
-There're lots of learning work...
+    There're lots of learning work...
 
 ** Optional org html source
 *** Design
-=org-publish= has a =:htmlized-source= option, with which you can export htmlized
-org source together with html files, see
-http://orgmode.org/worg/worg-setup.org.html for a live example.
+    =org-publish= has a =:htmlized-source= option, with which you can export
+    htmlized org source together with html files, see
+    http://orgmode.org/worg/worg-setup.org.html for a live example.
 
 *** Implementation
-The implementation should be easy:
-- Add a =:htmlized-source= option to =org-publish=
-- Add proper html links to generated html files
+    The implementation should be easy:
+    - Add a =:htmlized-source= option to =org-publish=
+    - Add proper html links to generated html files
 
 ** Code block enhancement
 *** Design
-code block need some extra enhancement to make it work more fluent:
-- it should be copiable with a single click
-- it should be collapsible with a single click
-- configurable line number support
+    code block need some extra enhancement to make it work more fluent:
+    - it should be copiable with a single click
+    - it should be collapsible with a single click
+    - configurable line number support
 
 *** Implementation
-I guess these minor features need some work with js, which I'm not familiar
-with, so, lots of learning work.
+    I guess these minor features need some work with js, which I'm not familiar
+    with, so, lots of learning work.
 
 ** org-mode code weave/tangle, something like literate programming? enhancement
 *** Design
-Org-mode support something like [literate
-programming](http://en.wikipedia.org/wiki/Literate_programming), you can see
-http://orgmode.org/worg/org-papers.html for details. And what I want basically
-is, when there're code in org article, there should be a downloadable tarball
-which contains all code appeared in this article.
+    Org-mode support something like [[http://en.wikipedia.org/wiki/Literate_programming][literate programming]], you can see
+    http://orgmode.org/worg/org-papers.html for details. And what I want
+    basically is, when there're code in org article, there should be a
+    downloadable tarball which contains all code appeared in this article.
 
 *** Implementation
-Org-mode support something like code weave and tangle, deeper exploration is
-needed to finish this feature.
+    Org-mode support something like code weave and tangle, deeper exploration is
+    needed to finish this feature.
+
 ** Theme customization guide and some more theme?
 
 *** Design
-Theme support and easy customization is one of the most important design goals
-of org-site. Internally, org-site use =mustache.el= and html template to
-generate html pages, these process need a explicit interface guide to facilitate
-third-party theme customization, for example, which variable represents:
-- site title
-- site author
-- site url
-- page toc
-- page contents
+    Theme support and easy customization is one of the most important design
+    goals of org-site. Internally, org-site use =mustache.el= and html template
+    to generate html pages, these process need a explicit interface guide to
+    facilitate third-party theme customization, for example, which variable
+    represents:
+    - site title
+    - site author
+    - site url
+    - page toc
+    - page contents
 
-And based on the detailed, explicit theme customization guide, we can provide
-more built-in theme support.
+    And based on the detailed, explicit theme customization guide, we can
+    provide more built-in theme support.
 
 *** Implementation
-These feature contains documentation and coding work, and I think documentation
-work is more time-consuming than coding work.
+    These feature contains documentation and coding work, and I think
+    documentation work is more time-consuming than coding work.
 
 ** Category/Tag/Archive support                                        :v0.1:
 *** Design
-These feature is not necessary for a static site, but when you use org-site as a
-static blog generator, then category/tag/archive is a must.
+    These feature is not necessary for a static site, but when you use org-site
+    as a static blog generator, then category/tag/archive is a must.
 
 *** Implementation
-Like auto-generated index, we need some utility function to generate
-category/tag/archive page.
+    Like auto-generated index, we need some utility function to generate
+    category/tag/archive page.
 
 ** org-site local/public publish support                               :v0.1:
 *** Design
-When you write page using org-site, most time you work with localhost, you need
-quick site preview, quick publish to localhost, quick page modification and
-refinement. You publish your site to public when you feel 100% comfortable with
-your work.
+    When you write page using org-site, most time you work with localhost, you
+    need quick site preview, quick publish to localhost, quick page modification
+    and refinement. You publish your site to public when you feel 100%
+    comfortable with your work.
 
-That means you need a complete working environment which just works in
-localhost, such as necessary css/js files of jquery/bootstrap/mathjax, etc. But
-org-site don't really need this css/js files when publish to public, all it need
-is some links to the *official* file links, something like
-http://code.jquery.com/jquery-2.0.0.min.js. You don't want the compressed js
-files to pollute your tuned org-site source files, right?
+    That means you need a complete working environment which just works in
+    localhost, such as necessary css/js files of jquery/bootstrap/mathjax,
+    etc. But org-site don't really need this css/js files when publish to
+    public, all it need is some links to the *official* file links, something
+    like http://code.jquery.com/jquery-2.0.0.min.js. You don't want the
+    compressed js files to pollute your tuned org-site source files, right?
 
 *** Implementation
-- Add an optional argument =org-site-mode= to =org-site-publish=, which can be
-  assigned to =localhost= or =public=, and the default value is
-  =localhost=. When =org-site-mode= is =localhost=, set all css/js links to
-  local disk css/js files, else, set all css/js files link to official public
-  links. Pretty simple, ha.
+    Add an optional argument =org-site-mode= to =org-site-publish=, which can be
+    assigned to =localhost= or =public=, and the default value is
+    =localhost=. When =org-site-mode= is =localhost=, set all css/js links to
+    local disk css/js files, else, set all css/js files link to official public
+    links. Pretty simple, ha.
 
 ** site statistics, site search                                        :v0.1:
 *** Design
-Static site need third-party tools to facilitate things like comments,
-statistics, site search, etc. Org-site already has support for comments using
-disqus, but still lacks support for site statistics, search engine, gravartar,
-etc.
+    Static site need third-party tools to facilitate things like comments,
+    statistics, site search, etc. Org-site already has support for comments
+    using disqus, but still lacks support for site statistics, search engine,
+    gravartar, etc.
 
 *** Implementation
-- site statistics: google site?
-- site search: google customize search?
+    - site statistics: google site?
+    - site search: google customize search?
 
 ** RSS support                                                         :v0.1:
 *** Design
-RSS support is a must of org-site.
+    RSS support is a must of org-site.
 
 *** Implementation
-I'm not familiar with RSS, so may be there're lots of work to do.
+    I'm not familiar with RSS, so may be there're lots of work to do.
 
 ** Theme and design refinement                                         :v0.1:
 *** Design
-Current theme still has lots flaws and bugs, which may need some refinement and
-redesign. For example, the TOC anchor doesn't locate to the right section due to
-css margin.
+    Current theme still has lots flaws and bugs, which may need some refinement
+    and redesign. For example, the TOC anchor doesn't locate to the right
+    section due to css margin.
 
 *** Implementation
-Pluskid's blog is really a good design using bootstrap, see
-http://freemind.pluskid.org/, I'll import some elements from it.
+    Pluskid's blog is really a good design using bootstrap, see
+    http://freemind.pluskid.org/, I'll import some elements from it.
 
 ** Customizable TOC support                                            :v0.1:
 *** Design
-
-=org-export-as-html= will export a simple TOC(Table of Contents) by default, what I want is:
-
-- configurable TOC, user can enable or disable TOC generation when publish org-site
-- style improvement, this point is inspired by page like this:
-  http://orgmode.org/worg/org-tutorials/org-publish-html-tutorial.html, I want
-  something like this, floatable, collapsable, etc.
+    =org-export-as-html= will export a simple TOC(Table of Contents) by default,
+    what I want is:
+    - configurable TOC, user can enable or disable TOC generation when publish org-site
+    - style improvement, this point is inspired by page like this:
+      http://orgmode.org/worg/org-tutorials/org-publish-html-tutorial.html, I
+      want something like this, floatable, collapsable, etc.
 
 *** Implementation
-Do some hack about =org-export-as-html=, and seperable toc from <body>...</body>,
-then render it with =mustache.el=. Need some CSS work, js may also needed.
+    Do some hack about =org-export-as-html=, and seperable toc from
+    <body>...</body>, then render it with =mustache.el=. Need some CSS work, js
+    may also needed.
