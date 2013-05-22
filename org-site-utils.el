@@ -103,7 +103,7 @@ Org file could contains lots of \"#+\...\" properties, which could be used to
 control exporting actions, provide document metainfo, etc. This function will
 read all the properties and turn it into a property dict."
   (let ((org-file-string-list
-         (s-lines (file-to-string "README.org")))
+         (s-lines (file-to-string org-file)))
         (prop-regexp "^#\\+\\(.*?\\):[ \t]+\\(.*\\)")
         (prop-dict (ht-create)))
     (dolist (line org-file-string-list)
@@ -113,6 +113,25 @@ read all the properties and turn it into a property dict."
       (ht-set prop-dict prop-key prop-value))
     (ht-remove prop-dict nil)
     prop-dict))
+
+(defun org-org-get-file-tags (org-file)
+  "Get tags of ORG-FILE and return it as a list."
+  (let ((tags (ht-get (org-org-get-file-properties org-file)
+                      "TAGS")))
+    (if tags
+        (s-split-words tags)
+      nil)))
+
+(defun org-org-get-file-category (org-file)
+  "Get category of ORG-FILE and return it as a list.
+
+One post could only has one category, which is specified by \"#+CATEGORY: \"
+in org file header section."
+  (let ((CATEGORY (ht-get (org-org-get-file-properties org-file)
+                          "CATEGORY")))
+    (if CATEGORY
+        (s-trim CATEGORY)
+      nil)))
 
 (with-namespace "org-site"
   (defun new-project (&optional project-directory)
@@ -231,7 +250,8 @@ If VIEW-ORG-FILE is non-nil, switch to that buffer, else, kill that buffer."
             `("site-title" ,org-site-title
               "nav-post" "post/"
               "nav-wiki" "wiki/"
-              "nav-tags" "tags/"
+              "nav-categories" "categories.html"
+              "nav-tags" "tags.html"
               "nav-about" "about.html"))))
       (org-site-render "preamble.html" context)))
 

@@ -37,18 +37,19 @@
 (require 'org-site-hack)
 
 (with-namespace "org-site"
-  (defun publish-get-base-files (base-dir)
+  (defun publish-get-base-files (base-dir &optional extension)
     "Get all org files under BASE-DIR.
 
 This function actually copy some code from `org-publish-get-base-files'."
-    (setq org-sitemap-requested nil)
-    (setq org-publish-temp-files nil)
-    (setq extension "org")
-    (setq match (concat "^[^\\.].*\\.\\(" extension "\\)$"))
-    (org-publish-get-base-files-1 base-dir t match "index" nil)
-    org-publish-temp-files)
+    (let ((org-sitemap-requested nil)
+          (org-publish-temp-files nil)
+          (match (concat "^[^\\.].*\\.\\("
+                         (if extension extension "org")
+                         "\\)$")))
+      (org-publish-get-base-files-1 base-dir t match "index" nil)
+      org-publish-temp-files))
 
-  (defun pre-publish (base-dir site-sub-dir)
+  (defun generate-index (base-dir site-sub-dir)
     "Generate necessary \"index.org\" file which is used to generate related
 \"index.html\" for org-site.
 
@@ -58,7 +59,7 @@ TODO:
                      (expand-file-name site-sub-dir base-dir)))
            (sub-index (expand-file-name "index.org" sub-dir))
            (absolute-org-files (org-site-publish-get-base-files sub-dir)))
-      (setq title-path-org-files
+      (setq path-title-org-files
             (mapcar (lambda (filename)
                       (cons (concat site-sub-dir
                                     "/"
@@ -66,23 +67,91 @@ TODO:
                             (org-site-get-org-file-title filename)))
                     absolute-org-files))
       (with-temp-buffer
-        (dolist (title-path-pair title-path-org-files)
-          (insert (format "#+TITLE: %ss\n" (capitalize site-sub-dir)))
+        (insert (format "#+TITLE: %ss\n" (capitalize site-sub-dir)))
+        (dolist (path-title-pair path-title-org-files)
           (insert (format "- [[file:%s][%s]]\n"
-                          (car title-path-pair)
-                          (cdr title-path-pair))))
+                          (car path-title-pair)
+                          (cdr path-title-pair))))
         (when (file-writable-p sub-index)
           (write-region (point-min)
                         (point-max)
                         sub-index)))))
 
-  (defun post-publish (base-dir site-sub-dir)
-    "Delete uncessary \"index.org\" after publish."
+  (defun generate-tags (base-dir site-sub-dir)
+    "Generate necessary \"tags.org\" for posts."
     (let* ((sub-dir (file-name-as-directory
                      (expand-file-name site-sub-dir base-dir)))
-           (sub-index (expand-file-name "index.org" sub-dir)))
+           (tags-file (expand-file-name "tags.org" base-dir))
+           (absolute-org-files (org-site-publish-get-base-files sub-dir))
+           (tags (ht-create)))
+      (dolist (org-file absolute-org-files)
+        (dolist (tag (org-org-get-file-tags org-file))
+          (let ((path-title-pair
+                 (cons (concat site-sub-dir
+                               "/"
+                               (s-chop-prefix sub-dir org-file))
+                       (org-site-get-org-file-title org-file)))
+                (ht-tag (ht-get tags tag)))
+            (ht-set tags tag (cons path-title-pair ht-tag)))))
+      (with-temp-buffer
+        (insert (format "#+TITLE: Tags\n"))
+        (dolist (tag (ht-keys tags))
+          (insert (format "* %s\n" tag))
+          (dolist (path-title-pair (ht-get tags tag))
+            (insert (format "- [[file:%s][%s]]\n"
+                            (car path-title-pair)
+                            (cdr path-title-pair)))))
+        (when (file-writable-p tags-file)
+          (write-region (point-min)
+                        (point-max)
+                        tags-file)))))
+
+  (defun generate-categories (base-dir site-sub-dir)
+    "Generate necessary \"categories.org\" for posts."
+    (let* ((sub-dir (file-name-as-directory
+                     (expand-file-name site-sub-dir base-dir)))
+           (categories-file (expand-file-name "categories.org" base-dir))
+           (absolute-org-files (org-site-publish-get-base-files sub-dir))
+           (categories (ht-create)))
+      (dolist (org-file absolute-org-files)
+        (let* ((path-title-pair
+                (cons (concat site-sub-dir
+                              "/"
+                              (s-chop-prefix sub-dir org-file))
+                      (org-site-get-org-file-title org-file)))
+               (category (org-org-get-file-category org-file))
+               (ht-category (ht-get categories category)))
+          (if category
+              (ht-set categories category (cons path-title-pair ht-category)))))
+      (with-temp-buffer
+        (insert (format "#+TITLE: Categories\n"))
+        (dolist (category (ht-keys categories))
+          (insert (format "* %s\n" category))
+          (dolist (path-title-pair (ht-get categories category))
+            (insert (format "- [[file:%s][%s]]\n"
+                            (car path-title-pair)
+                            (cdr path-title-pair)))))
+        (when (file-writable-p categories-file)
+          (write-region (point-min)
+                        (point-max)
+                        categories-file)))))
+
+  (defun pre-publish (base-dir)
+    "Generate necessary index, tags, categories org files"
+     (dolist (sub-dir '("post" "wiki"))
+      (org-site-generate-index base-dir sub-dir))
+    (org-site-generate-tags base-dir "post")
+    (org-site-generate-categories base-dir "post"))
+
+  (defun post-publish (base-dir)
+    "Delete the auto-generated index, tags, categories org files after publish."
+    (let ((post-index (expand-file-name "post/index.org" base-dir))
+          (wiki-index (expand-file-name "wiki/index.org" base-dir))
+          (tags (expand-file-name "tags.org" base-dir))
+          (categories (expand-file-name "categories.org" base-dir)))
       (unless org-site-debug
-        (delete-file sub-index))))
+        (dolist (org-file (list post-index wiki-index tags categories))
+          (delete-file org-file)))))
 
   (defun publish (project-dir &optional force)
     "This function will publish your site to necessary output result,
@@ -104,8 +173,7 @@ This function is based on `org-publish', and used org-site's monkey patched
             (delete-directory org-site-html-publish-dir t))
       (make-directory org-site-html-publish-dir))
 
-    (dolist (sub-dir '("post" "wiki"))
-      (org-site-pre-publish project-dir sub-dir))
+    (org-site-pre-publish project-dir)
     ;; Enable and activate the monkey-patched `org-export-as-html'.
     (ad-enable-advice 'org-export-as-html 'around 'org-site-export-as-html)
     (ad-activate 'org-export-as-html)
@@ -150,8 +218,7 @@ This function is based on `org-publish', and used org-site's monkey patched
     (org-publish-all force)
     (ad-disable-advice 'org-export-as-html 'around 'org-site-export-as-html)
     (ad-deactivate 'org-export-as-html)
-    (dolist (sub-dir '("post" "wiki"))
-      (org-site-post-publish project-dir sub-dir))))
+    (org-site-post-publish project-dir)))
 
 (provide 'org-site-publish)
 ;;; org-site-publish.el ends here
