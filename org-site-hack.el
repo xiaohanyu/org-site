@@ -102,7 +102,7 @@ disabled outside `org-site-publish'."
               "content" ,content
               "postamble" ,postamble))))
       (ht-set context "enable-toc"
-              (if org-site-enable-toc
+              (if (and toc org-site-enable-toc)
                   (list (ht-from-plist `("toc" ,toc)))
                 nil))
       (insert (org-site-render "page.html" context)))

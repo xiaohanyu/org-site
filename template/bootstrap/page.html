@@ -103,13 +103,14 @@
           <div class="span8">
             {{& content}}
           </div>
+
+          {{#enable-toc}}
           <div class="span4">
             <div class="well">
-              {{#enable-toc}}
               {{& toc}}
-              {{/enable-toc}}
             </div>
           </div>
+          {{/enable-toc}}
         </div>
         <div id="push"></div>
       </div>
