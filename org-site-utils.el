@@ -122,6 +122,19 @@ read all the properties and turn it into a property dict."
         (s-split-words tags)
       nil)))
 
+(defun org-org-have-math (org-file-or-string)
+  "Check whether ORG-FILE has latex math fragment.
+
+ORG-FILE is a org file or (buffer-string) of a org file."
+  (let ((org-file-string
+         (if (file-exists-p org-file-or-string)
+             (file-to-string org-file-or-string)
+           org-file-or-string)))
+    (-any? (lambda (e)
+             (setq re (nth 1 e))
+             (s-matches? re org-file-string))
+           org-latex-regexps)))
+
 (defun org-org-get-file-category (org-file)
   "Get category of ORG-FILE and return it as a list.
 

@@ -8,6 +8,32 @@
 
 * Features Design and Implemenation
 
+** MathJax support
+*** Design
+    Math support is important for science and technical writings. Org-mode have
+    math support through a LaTeX syntax, when exporting to html, org-mode will
+    invoke [[http://www.mathjax.org][MathJax]] for html rendering.
+
+    But MathJax itself is too big to be included locally as bootstrap/jquery by
+    org-site, so when preview html in =localhost= mode, maybe we should use a
+    fallback dvipng strategy provided by org-mode. But the problems of dvipng
+    strategy is that it will generate losts of small png files, which will
+    pollute your site, on the other side, modern browser has caches, so once
+    you have invoke MathJax, it will be available for some time even the browser
+    is offline.
+
+    If you do want dvipng when localhost, you can set
+    =org-export-with-LaTeX-fragments= manually:
+
+    #+BEGIN_SRC emacs-lisp
+    (setq org-export-with-LaTeX-fragments 'dvipng)
+    #+END_SRC
+
+*** Implementation
+    - Add MathJax cdn link when org file contains math.
+    - Functions to check whether or not an org file contains math.
+    - +Fallback to dvipng when localhost+.
+
 ** Ert test for some tool functions
 *** Design
     At first, I just want org-site to work, which means I should come up with a

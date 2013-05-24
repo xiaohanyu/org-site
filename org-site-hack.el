@@ -70,9 +70,12 @@ disabled outside `org-site-publish'."
                      "." html-extension)))
          ; Avoid any auto-insert stuff for the new file
          (auto-insert nil)
-         (base-url nil))
+         (base-url nil)
+         (org-file-string (substring-no-properties (buffer-string))))
 
     ad-do-it
+
+    (setq have-math (org-org-have-math org-file-string))
     (setq org-html (substring-no-properties (car kill-ring)))
     (setq content (org-html-get-body-content org-html))
     (setq toc (org-html-get-body-toc org-html))
@@ -98,6 +101,7 @@ disabled outside `org-site-publish'."
            (ht-from-plist
             `("title" ,title
               "base-url" ,base-url
+              "have-math" ,have-math
               "preamble" ,preamble
               "content" ,content
               "postamble" ,postamble))))
