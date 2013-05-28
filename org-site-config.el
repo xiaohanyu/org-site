@@ -67,6 +67,10 @@ with your real site url.")
   (defconst enable-toc nil
     "Enable toc(Table Of Contents) or not")
 
+  ;;; google custom search
+  (defconst enable-google-search nil
+    "Enable google custom search or not")
+
   ;;; comment system settings
   (defconst enable-comment nil
     "Enable disqus comment or not")

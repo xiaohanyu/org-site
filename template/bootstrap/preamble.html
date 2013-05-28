@@ -14,11 +14,17 @@
           <li><a href="{{nav-tags}}" class="menu">Tags</a></li>
           <li class="divider-vertical"></li>
           <li><a href="{{nav-wiki}}" class="menu">Wikis</a></li>
-        </ul>
-        <ul class="nav pull-right">
+          <li class="divider-vertical"></li>
           <li><a href="{{nav-subscribe}}" class="menu">Subscribe</a></li>
           <li><a href="{{nav-about}}" class="menu">About</a></li>
         </ul>
+        {{#enable-google-search}}
+        <form class="navbar-form pull-right" target="_blank" method="get" action="http://google.com/search">
+          <input type="hidden" value="site:{{site-url}}" name="q">
+          <input class="span2" type="text" placeholder="Type something" result="0" name="q">
+          <button type="submit" class="btn">Search</button>
+        </form>
+        {{/enable-google-search}}
       </div>
     </div>
   </div>
