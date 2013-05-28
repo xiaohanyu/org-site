@@ -38,10 +38,10 @@
 (with-namespace "org-site"
   ;;; basic site settings
   (defconst title "Org-Site"
-    "Title for your org-site")
+    "Title for your org-site.")
 
   (defconst url "http://your.personal.org.site.url"
-    "Url of your org-site
+    "Url of your org-site.
 
 This variable is very important to your org-site. It is the base url of all your
 org-site html links. If you want to preview in localhost, just set it with
@@ -49,42 +49,42 @@ localhost, if you want to publish your org-site to public, then keep consistency
 with your real site url.")
 
   (defconst theme "bootstrap"
-    "Theme for your org-site")
+    "Theme for your org-site.")
 
   ;;; personal information
   (defconst author-name "Your name"
-    "Author name of the site")
+    "Author name of the site.")
 
   (defconst author-email "org-site@org-site.com"
-    "Author email")
+    "Author email.")
 
   ;;; meta info of post
   ;; meta info contains thing like post date, author,category, etc.
   (defconst enable-meta-info nil
-    "Enable meta info or not")
+    "Enable meta info or not.")
 
   ;;; toc of post
   (defconst enable-toc nil
-    "Enable toc(Table Of Contents) or not")
+    "Enable toc(Table Of Contents) or not.")
 
   ;;; google custom search
   (defconst enable-google-search nil
-    "Enable google custom search or not")
+    "Enable google custom search or not.")
 
   ;;; comment system settings
   (defconst enable-comment nil
-    "Enable disqus comment or not")
+    "Enable disqus comment or not.")
 
   ;; static site need extra third comment system
   ;; currently, org-site only support disqus
   (defconst disqus-identifier "test"
-    "disqus-identifier for your org-site")
+    "disqus-identifier for your org-site.")
 
   (defconst disqus-url "test"
-    "disqus-url for your org-site")
+    "disqus-url for your org-site.")
 
   (defconst disqus-shortname "test"
-    "disqus-shortname for your org-site")
+    "disqus-shortname for your org-site.")
 
   ;;; org-publish settings
   (defconst html-publish-dir "/path/to/your/org/site/html/dir/"
@@ -96,5 +96,5 @@ under `org-site-project-directory'.")
   ;;; debug mode support
   (defconst debug t
     "Set org-site in debug state, which means org-site will keep the
-  auto-generated index org files after publishing"))
+auto-generated index org files after publishing."))
 ;;; org-site-config.el ends here

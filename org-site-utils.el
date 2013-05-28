@@ -40,13 +40,13 @@
 (require 'org-site-vars)
 
 (defun file-to-string (file)
-  "Return the file contents as a string"
+  "Return the file contents as a string."
   (with-temp-buffer
     (insert-file-contents file)
     (buffer-string)))
 
 (defun mustache-file-render (file context)
-  "Read the file contents, then render it with a hashtable context
+  "Read the file contents, then render it with a hashtable context.
 
 Actually, this function is a shortcut function inspired by Django's
 render_to_response."

@@ -137,7 +137,7 @@ TODO:
                         categories-file)))))
 
   (defun pre-publish (base-dir)
-    "Generate necessary index, tags, categories org files"
+    "Generate necessary index, tags, categories org files."
      (dolist (sub-dir '("post" "wiki"))
       (org-site-generate-index base-dir sub-dir))
     (org-site-generate-tags base-dir "post")
