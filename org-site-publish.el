@@ -168,9 +168,24 @@ This function is based on `org-publish', and used org-site's monkey patched
            (y-or-n-p "Force republish all? ")))
     (org-site-load-project project-dir)
 
+    (unless org-site-html-publish-dir
+      (setq org-site-html-publish-dir
+            (expand-file-name "publish"
+                              org-site-project-directory)))
+
     (if (file-exists-p org-site-html-publish-dir)
-        (if force
-            (delete-directory org-site-html-publish-dir t))
+        (progn
+          (unless (file-directory-p org-site-html-publish-dir)
+                  (error "%s exists but is not a directory"
+                         org-site-html-publish-dir))
+          (if force
+              (dolist (file-or-dir
+                       (directory-files org-site-html-publish-dir t))
+                ;; do not delete '.', '..' and '.git', '.gitignore'
+                (unless (s-matches? "\\.$\\|\\.git" file-or-dir)
+                  (if (file-directory-p file-or-dir)
+                      (delete-directory file-or-dir t)
+                    (delete-file file-or-dir))))))
       (make-directory org-site-html-publish-dir))
 
     (org-site-pre-publish project-dir)

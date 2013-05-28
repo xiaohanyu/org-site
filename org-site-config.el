@@ -88,7 +88,10 @@ with your real site url.")
 
   ;;; org-publish settings
   (defconst html-publish-dir "/path/to/your/org/site/html/dir/"
-    "Publishing directory for html files")
+    "Publishing directory for html files.
+
+If set to nil, org-site will publish files to a \"publish\" sub directory
+under `org-site-project-directory'.")
 
   ;;; debug mode support
   (defconst debug t
