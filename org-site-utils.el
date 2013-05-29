@@ -122,6 +122,24 @@ read all the properties and turn it into a property dict."
         (s-split-words tags)
       nil)))
 
+(defun org-org-get-file-mtime (org-file)
+  "Get the mtime of ORG-FILE.
+
+By default, we will use the file mtime as the final return result. But you can
+override it with a \"#+DATE: <org-time-stamp>\" in ORG-FILE. Refer
+`org-time-stamp' and `org-time-stamp-inactive' for details.
+
+This function is a must to sort posts in `org-site-generate-index'."
+  (let* ((attrs (file-attributes org-file))
+         (mtime (nth 5 attrs))
+         (org-file-prop-dict (org-org-get-file-properties org-file))
+         (org-file-date (ht-get org-file-prop-dict "DATE")))
+    (if org-file-date
+        (setq mtime
+              (apply #'encode-time
+                     (org-parse-time-string org-file-date))))
+    mtime))
+
 (defun org-org-have-math (org-file-or-string)
   "Check whether ORG-FILE has latex math fragment.
 
@@ -145,6 +163,18 @@ in org file header section."
     (if CATEGORY
         (s-trim CATEGORY)
       nil)))
+
+(defun org-org-get-file-title (org-file)
+    "Get org file title based on contents or filename.
+
+Org-mode has a `org-publish-find-title' function, but this function has some
+minor problems with `org-publish-cache'."
+    (with-temp-buffer
+      (insert-file-contents org-file)
+      (setq opt-plist (org-infile-export-plist))
+      (or (plist-get opt-plist :title)
+          (file-name-sans-extension
+           (file-name-nondirectory filename)))))
 
 (with-namespace "org-site"
   (defun new-project (&optional project-directory)
@@ -207,18 +237,6 @@ org-site configuration file to the project's directory"
     (file-name-as-directory
      (expand-file-name "static"
                        org-site-load-directory)))
-
-  (defun get-org-file-title (org-file)
-    "Get org file title based on contents or filename.
-
-Org-mode has a `org-publish-find-title' function, but this function has some
-minor problems with `org-publish-cache'."
-    (with-temp-buffer
-      (insert-file-contents org-file)
-      (setq opt-plist (org-infile-export-plist))
-      (or (plist-get opt-plist :title)
-          (file-name-sans-extension
-           (file-name-nondirectory filename)))))
 
   (defun new-org-file (org-file &optional view-org-file)
     "Find a new org-file and insert some basic org options.

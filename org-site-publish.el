@@ -59,19 +59,26 @@ TODO:
                      (expand-file-name site-sub-dir base-dir)))
            (sub-index (expand-file-name "index.org" sub-dir))
            (absolute-org-files (org-site-publish-get-base-files sub-dir)))
-      (setq path-title-org-files
+      (setq path-title-mtime-org-files
             (mapcar (lambda (filename)
-                      (cons (concat site-sub-dir
+                      (list (concat site-sub-dir
                                     "/"
                                     (s-chop-prefix sub-dir filename))
-                            (org-site-get-org-file-title filename)))
+                            (org-org-get-file-title filename)
+                            (org-org-get-file-mtime filename)))
                     absolute-org-files))
+      (setq path-title-mtime-org-files
+            (sort path-title-mtime-org-files
+                  #'(lambda (path-title-mtime1 path-title-mtime2)
+                      (not (time-less-p (nth 2 path-title-mtime1)
+                                        (nth 2 path-title-mtime2))))))
       (with-temp-buffer
         (insert (format "#+TITLE: %ss\n" (capitalize site-sub-dir)))
-        (dolist (path-title-pair path-title-org-files)
-          (insert (format "- [[file:%s][%s]]\n"
-                          (car path-title-pair)
-                          (cdr path-title-pair))))
+        (dolist (path-title-mtime path-title-mtime-org-files)
+          (insert (format "- %s :: [[file:%s][%s]]\n"
+                          (format-time-string "%Y-%m-%d" (caddr path-title-mtime))
+                          (car path-title-mtime)
+                          (cadr path-title-mtime))))
         (when (file-writable-p sub-index)
           (write-region (point-min)
                         (point-max)
@@ -90,7 +97,7 @@ TODO:
                  (cons (concat site-sub-dir
                                "/"
                                (s-chop-prefix sub-dir org-file))
-                       (org-site-get-org-file-title org-file)))
+                       (org-org-get-file-title org-file)))
                 (ht-tag (ht-get tags tag)))
             (ht-set tags tag (cons path-title-pair ht-tag)))))
       (with-temp-buffer
@@ -118,7 +125,7 @@ TODO:
                 (cons (concat site-sub-dir
                               "/"
                               (s-chop-prefix sub-dir org-file))
-                      (org-site-get-org-file-title org-file)))
+                      (org-org-get-file-title org-file)))
                (category (org-org-get-file-category org-file))
                (ht-category (ht-get categories category)))
           (if category
