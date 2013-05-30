@@ -10,3 +10,9 @@ tramp
 # Org-mode
 .org-id-locations
 *_archive
+
+tags.org
+categories.org
+post/index.org
+wiki/index.org
+publish
