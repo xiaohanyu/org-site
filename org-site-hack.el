@@ -94,13 +94,43 @@ disabled outside `org-site-publish'."
          (set-buffer-file-coding-system coding-system-for-write))
 
     (if (s-matches? "localhost" org-site-url)
-        (setq base-url "/")
-      (setq base-url org-site-url))
+        (setq base-url
+              "/"
+
+              bootstrap-min-css
+              "static/bootstrap/css/bootstrap.min.css"
+
+              bootstrap-responsive-min-css
+              "static/bootstrap/css/bootstrap-responsive.min.css"
+
+              jquery-min-js
+              "static/jquery/jquery-2.0.0.min.js"
+
+              bootstrap-min-js
+              "static/bootstrap/js/bootstrap.min.js")
+      (setq base-url
+            org-site-url
+
+            bootstrap-min-css
+            org-site-bootstrap-min-css-link
+
+            bootstrap-responsive-min-css
+            org-site-bootstrap-reponsive-min-css-link
+
+            jquery-min-js
+            org-site-jquery-min-js-link
+
+            bootstrap-min-js
+            org-site-bootstrap-min-js-link))
 
     (let ((context
            (ht-from-plist
             `("title" ,title
               "base-url" ,base-url
+              "bootstrap-min-css" ,bootstrap-min-css
+              "bootstrap-responsive-min-css" ,bootstrap-responsive-min-css
+              "jquery-min-js" ,jquery-min-js
+              "bootstrap-min-js" ,bootstrap-min-js
               "have-math" ,have-math
               "preamble" ,preamble
               "content" ,content

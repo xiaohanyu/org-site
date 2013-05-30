@@ -43,5 +43,27 @@
 (defconst org-site-project-directory nil
   "The current org-site project directory.")
 
+;;; various css/js CDN links
+;;; When you publish to localhost, you use local static css/js, but when you
+;;; publish to public, you can use the existing css/js CDN, the benefit:
+;;; - CDN css/js loads faster
+;;; - You can add static css/js to your .gitignore, thus you can avoid pollute
+;;;   your site with unnecessary minified css/js files.
+(defconst org-site-bootstrap-min-css-link
+  "http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap.min.css"
+  "Bootstrap css CDN from http://www.bootstrapcdn.com/.")
+
+(defconst org-site-bootstrap-reponsive-min-css-link
+  "http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-responsive.min.css"
+  "Bootstrap responsive css CDN from http://www.bootstrapcdn.com/.")
+
+(defconst org-site-bootstrap-min-js-link
+  "http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"
+  "Bootstrap js CDN from http://www.bootstrapcdn.com/.")
+
+(defconst org-site-jquery-min-js-link
+  "http://code.jquery.com/jquery-2.0.0.js"
+  "JQuery js CDN from http://code.jquery.com/.")
+
 (provide 'org-site-vars)
 ;;; org-site-vars.el ends here
