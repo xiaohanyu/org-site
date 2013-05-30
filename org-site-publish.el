@@ -160,19 +160,26 @@ TODO:
         (dolist (org-file (list post-index wiki-index tags categories))
           (delete-file org-file)))))
 
-  (defun publish (project-dir &optional force)
+  (defun publish (project-dir &optional republish localhost)
     "This function will publish your site to necessary output result,
 currentlly, only html publish is supported.
 
 PROJECT-DIR is where your org-site project located.
-if FORCE is non-nil, then the project publishing directory will first be
+
+If REPUBLISH is non-nil, then the project publishing directory will first be
 cleared, then the whole org-site project will be republished.
+
+If LOCALHOST is non-nil, then org-site will set `org-site-url' to \"localhost\",
+thus you can preview your site even if you didn't set `org-site-url' to
+\"localhost\" in org-site-config.el.
 
 This function is based on `org-publish', and used org-site's monkey patched
 `org-export-as-html' as html's :publishing-function."
     (interactive
      (list (read-directory-name "Project directory: " org-site-project-directory)
-           (y-or-n-p "Force republish all? ")))
+           (y-or-n-p "Force republish all? ")
+           (unless (s-matches? "localhost" org-site-url)
+             (y-or-n-p "Force publish in localhost mode? "))))
     (org-site-load-project project-dir)
 
     (unless org-site-html-publish-dir
@@ -185,7 +192,7 @@ This function is based on `org-publish', and used org-site's monkey patched
           (unless (file-directory-p org-site-html-publish-dir)
                   (error "%s exists but is not a directory"
                          org-site-html-publish-dir))
-          (if force
+          (if republish
               (dolist (file-or-dir
                        (directory-files org-site-html-publish-dir t))
                 ;; do not delete '.', '..' and '.git', '.gitignore'
@@ -194,6 +201,9 @@ This function is based on `org-publish', and used org-site's monkey patched
                       (delete-directory file-or-dir t)
                     (delete-file file-or-dir))))))
       (make-directory org-site-html-publish-dir))
+
+    (if localhost
+        (setq org-site-url "localhost"))
 
     (org-site-pre-publish project-dir)
     ;; Enable and activate the monkey-patched `org-export-as-html'.
@@ -237,7 +247,7 @@ This function is based on `org-publish', and used org-site's monkey patched
                                                    org-site-html-publish-dir))
          :recursive t
          :publishing-function org-publish-attachment)))
-    (org-publish-all force)
+    (org-publish-all republish)
     (ad-disable-advice 'org-export-as-html 'around 'org-site-export-as-html)
     (ad-deactivate 'org-export-as-html)
     (org-site-post-publish project-dir)))
