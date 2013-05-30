@@ -291,9 +291,7 @@ If VIEW-ORG-FILE is non-nil, switch to that buffer, else, kill that buffer."
   (defun generate-comment ()
     (let ((context
            (ht-from-plist
-            `("disqus-identifier" ,org-site-disqus-identifier
-              "disqus-url" ,org-site-disqus-url
-              "disqus-shortname" ,org-site-disqus-shortname))))
+            `("disqus-shortname" ,org-site-disqus-shortname))))
       (org-site-render "comment.html" context)))
 
   (defun generate-meta-info ()
@@ -320,10 +318,6 @@ If VIEW-ORG-FILE is non-nil, switch to that buffer, else, kill that buffer."
           (ht-set context
                   "meta-info"
                   (org-site-generate-meta-info)))
-      (if org-site-enable-comment
-          (ht-set context
-                  "comment"
-                  (org-site-generate-comment)))
       (org-site-render "postamble.html" context))))
 
 (provide 'org-site-utils)

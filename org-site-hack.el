@@ -139,6 +139,10 @@ disabled outside `org-site-publish'."
               (if (and toc org-site-enable-toc)
                   (list (ht-from-plist `("toc" ,toc)))
                 nil))
+      (if org-site-enable-comment
+          (ht-set context
+                  "comment"
+                  (org-site-generate-comment)))
       (insert (org-site-render "page.html" context)))
 
     (save-buffer)

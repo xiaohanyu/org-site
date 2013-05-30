@@ -77,13 +77,7 @@ with your real site url.")
 
   ;; static site need extra third comment system
   ;; currently, org-site only support disqus
-  (defconst disqus-identifier "test"
-    "disqus-identifier for your org-site.")
-
-  (defconst disqus-url "test"
-    "disqus-url for your org-site.")
-
-  (defconst disqus-shortname "test"
+  (defconst disqus-shortname "org-site"
     "disqus-shortname for your org-site.")
 
   ;;; org-publish settings
