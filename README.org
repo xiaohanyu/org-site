@@ -23,7 +23,7 @@ Features of org-site:
 Org-site depends on some extra elisp libraries, to install these dependencies,
 I recommend you install [[https://github.com/dimitri/el-get][el-get]] first, and then evaluate the following elisp
 code snippet in =*scratch*= buffer by typing =C-j=, =C-x C-e= or =M-x
-eval-print-last-exp=, or you can put it in your =.emacs= file.
+eval-print-last-exp=:
 
 #+BEGIN_SRC emacs-lisp
   (let ((el-get-sources))
@@ -103,8 +103,7 @@ And =mustache.el= depends following libs, so:
 1. [[https://github.com/Wilfred/ht.el][ht.el]]: The missing hash table utility library for Emacs.
 2. [[https://github.com/Wilfred/loop.el][loop.el]]: friendly imperative loop structures for Emacs lisp
 3. [[https://github.com/magnars/s.el][s.el]]: The long lost Emacs string manipulation library.
-4. [[https://github.com/Wilfred/with-namespace.el][with-namespace.el]]: interoperable elisp namespaces
-5. [[https://github.com/magnars/dash.el][dash.el]]: A modern list library for Emacs. This is required by =mustache.el=,
+4. [[https://github.com/magnars/dash.el][dash.el]]: A modern list library for Emacs. This is required by =mustache.el=,
    not by =org-site= directly.
 
 * Todo
