@@ -35,7 +35,6 @@
 
 (require 'ht)
 (require 'mustache)
-(require 'with-namespace)
 
 (require 'org-site-vars)
 
@@ -86,11 +85,11 @@ ideas?"
         (text-toc-regexp "<div id=\"text-table-of-.*\">\\(.\\|\n\\)*?</div>"))
     (s-trim
      (reduce
-     #'(lambda (regexp string)
-         (replace-regexp-in-string regexp "" string))
-     (list body-regexp title-regexp toc-regexp text-toc-regexp)
-     :initial-value org-html-body
-     :from-end t))))
+      #'(lambda (regexp string)
+          (replace-regexp-in-string regexp "" string))
+      (list body-regexp title-regexp toc-regexp text-toc-regexp)
+      :initial-value org-html-body
+      :from-end t))))
 
 ;; This function is inspired by org-website-get-file-property from org-website
 ;; package, see https://github.com/renard/org-website
@@ -165,160 +164,159 @@ in org file header section."
       nil)))
 
 (defun org-org-get-file-title (org-file)
-    "Get org file title based on contents or filename.
+  "Get org file title based on contents or filename.
 
 Org-mode has a `org-publish-find-title' function, but this function has some
 minor problems with `org-publish-cache'."
-    (with-temp-buffer
-      (insert-file-contents org-file)
-      (setq opt-plist (org-infile-export-plist))
-      (or (plist-get opt-plist :title)
-          (file-name-sans-extension
-           (file-name-nondirectory filename)))))
+  (with-temp-buffer
+    (insert-file-contents org-file)
+    (setq opt-plist (org-infile-export-plist))
+    (or (plist-get opt-plist :title)
+        (file-name-sans-extension
+         (file-name-nondirectory filename)))))
 
-(with-namespace "org-site"
-  (defun new-project (&optional project-directory)
-    "Create a new org-site project.
+(defun org-site-new-project (&optional project-directory)
+  "Create a new org-site project.
 
 This function just build a basic directory structure and copy a necessary
 org-site configuration file to the project's directory"
-    (interactive "GProject directory: ")
-    (unless project-directory
-      (setq project-directory default-directory))
-    (unless (file-exists-p project-directory)
-      (make-directory project-directory))
-    (setq old-default-directory default-directory)
-    (unwind-protect
-        (progn
-          (cd project-directory)
-          (make-directory "post")
-          (make-directory "wiki")
-          (copy-file (expand-file-name "org-site-config.el"
-                                       org-site-load-directory)
-                     project-directory)
-          (org-site-new-org-file
-           (expand-file-name "index.org"
-                             project-directory)
-           nil)
-          (org-site-new-org-file
-           (expand-file-name "about.org"
-                             project-directory)
-           nil)
-          (org-site-new-org-file
-           (expand-file-name "post/post1.org"
-                             project-directory)
-           nil)
-          (org-site-new-org-file
-           (expand-file-name "wiki/wiki1.org"
-                             project-directory)
-           nil)
-      (cd old-default-directory))))
+  (interactive "GProject directory: ")
+  (unless project-directory
+    (setq project-directory default-directory))
+  (unless (file-exists-p project-directory)
+    (make-directory project-directory))
+  (setq old-default-directory default-directory)
+  (unwind-protect
+      (progn
+        (cd project-directory)
+        (make-directory "post")
+        (make-directory "wiki")
+        (copy-file (expand-file-name "org-site-config.el"
+                                     org-site-load-directory)
+                   project-directory)
+        (org-site-new-org-file
+         (expand-file-name "index.org"
+                           project-directory)
+         nil)
+        (org-site-new-org-file
+         (expand-file-name "about.org"
+                           project-directory)
+         nil)
+        (org-site-new-org-file
+         (expand-file-name "post/post1.org"
+                           project-directory)
+         nil)
+        (org-site-new-org-file
+         (expand-file-name "wiki/wiki1.org"
+                           project-directory)
+         nil)
+        (cd old-default-directory))))
 
-  (defun load-project (&optional project-directory)
-    "Load the project settings and make org-site know its current project."
-    (interactive
-     (list (read-directory-name "Project directory: " org-site-project-directory)))
-    (unless project-directory
-      (setq project-directory default-directory))
-    (setq old-default-directory default-directory)
-    (unwind-protect
-        (progn
-          (cd project-directory)
-          (load-file "org-site-config.el"))
-      (cd old-default-directory))
-    (setq org-site-project-directory project-directory))
+(defun org-site-load-project (&optional project-directory)
+  "Load the project settings and make org-site know its current project."
+  (interactive
+   (list (read-directory-name "Project directory: " org-site-project-directory)))
+  (unless project-directory
+    (setq project-directory default-directory))
+  (setq old-default-directory default-directory)
+  (unwind-protect
+      (progn
+        (cd project-directory)
+        (load-file "org-site-config.el"))
+    (cd old-default-directory))
+  (setq org-site-project-directory project-directory))
 
-  (defun load-template (theme template)
-    (expand-file-name
-     (format "template/%s/%s" theme template)
-     (or org-site-load-directory default-directory)))
+(defun org-site-load-template (theme template)
+  (expand-file-name
+   (format "template/%s/%s" theme template)
+   (or org-site-load-directory default-directory)))
 
-  (defun get-static-dir ()
-    (file-name-as-directory
-     (expand-file-name "static"
-                       org-site-load-directory)))
+(defun org-site-get-static-dir ()
+  (file-name-as-directory
+   (expand-file-name "static"
+                     org-site-load-directory)))
 
-  (defun new-org-file (org-file &optional view-org-file)
-    "Find a new org-file and insert some basic org options.
+(defun org-site-new-org-file (org-file &optional view-org-file)
+  "Find a new org-file and insert some basic org options.
 
 If VIEW-ORG-FILE is non-nil, switch to that buffer, else, kill that buffer."
-    (if (file-exists-p org-file)
-        (error "File already exists, please type a new file."))
-    (let ((buffer (find-file-noselect org-file)))
-      (set-buffer buffer)
-      (org-insert-export-options-template)
-      (save-buffer)
-      (if view-org-file
-          (switch-to-buffer buffer)
-        (kill-buffer buffer))))
+  (if (file-exists-p org-file)
+      (error "File already exists, please type a new file."))
+  (let ((buffer (find-file-noselect org-file)))
+    (set-buffer buffer)
+    (org-insert-export-options-template)
+    (save-buffer)
+    (if view-org-file
+        (switch-to-buffer buffer)
+      (kill-buffer buffer))))
 
-  (defun new-post (org-file)
-    (interactive
-     (list (read-file-name
-            "file name: "
-            (file-name-as-directory
-             (expand-file-name "post"
-                               org-site-project-directory)))))
-    (new-org-file org-file))
+(defun org-site-new-post (org-file)
+  (interactive
+   (list (read-file-name
+          "file name: "
+          (file-name-as-directory
+           (expand-file-name "post"
+                             org-site-project-directory)))))
+  (new-org-file org-file))
 
-  (defun new-wiki (org-file)
-    (interactive
-     (list (read-file-name
-            "file name: "
-            (file-name-as-directory
-             (expand-file-name "wiki"
-                               org-site-project-directory)))))
-    (new-org-file org-file))
+(defun org-site-new-wiki (org-file)
+  (interactive
+   (list (read-file-name
+          "file name: "
+          (file-name-as-directory
+           (expand-file-name "wiki"
+                             org-site-project-directory)))))
+  (new-org-file org-file))
 
-  (defun render (template context)
-    (mustache-file-render
-     (org-site-load-template org-site-theme template)
-     context))
+(defun org-site-render (template context)
+  (mustache-file-render
+   (org-site-load-template org-site-theme template)
+   context))
 
-  (defun generate-preamble ()
-    (let ((context
-           (ht-from-plist
-            `("site-title" ,org-site-title
-              "site-url" ,org-site-url
-              "nav-post" "post/"
-              "nav-wiki" "wiki/"
-              "nav-categories" "categories.html"
-              "nav-tags" "tags.html"
-              "nav-about" "about.html"
-              "enable-google-search" ,org-site-enable-google-search))))
-      (org-site-render "preamble.html" context)))
+(defun org-site-generate-preamble ()
+  (let ((context
+         (ht-from-plist
+          `("site-title" ,org-site-title
+            "site-url" ,org-site-url
+            "nav-post" "post/"
+            "nav-wiki" "wiki/"
+            "nav-categories" "categories.html"
+            "nav-tags" "tags.html"
+            "nav-about" "about.html"
+            "enable-google-search" ,org-site-enable-google-search))))
+    (org-site-render "preamble.html" context)))
 
-  (defun generate-comment ()
-    (let ((context
-           (ht-from-plist
-            `("disqus-shortname" ,org-site-disqus-shortname))))
-      (org-site-render "comment.html" context)))
+(defun org-site-generate-comment ()
+  (let ((context
+         (ht-from-plist
+          `("disqus-shortname" ,org-site-disqus-shortname))))
+    (org-site-render "comment.html" context)))
 
-  (defun generate-meta-info ()
-    (let ((context
-           (ht-from-plist
-            `("post-date" "post-date"
-              "update-date" "update-date"
-              "tags" "tags"
-              "author-name" ,org-site-author-name))))
-      (org-site-render "meta-info.html" context)))
+(defun org-site-generate-meta-info ()
+  (let ((context
+         (ht-from-plist
+          `("post-date" "post-date"
+            "update-date" "update-date"
+            "tags" "tags"
+            "author-name" ,org-site-author-name))))
+    (org-site-render "meta-info.html" context)))
 
-  (defun generate-footer ()
-    (let ((context
-           (ht-from-plist
-            `("author-email" ,org-site-author-email
-              "author-name" ,org-site-author-name))))
-      (org-site-render "footer.html" context)))
+(defun org-site-generate-footer ()
+  (let ((context
+         (ht-from-plist
+          `("author-email" ,org-site-author-email
+            "author-name" ,org-site-author-name))))
+    (org-site-render "footer.html" context)))
 
-  (defun generate-postamble ()
-    (let ((context
-           (ht-from-plist
-            `("footer" ,(org-site-generate-footer)))))
-      (if org-site-enable-meta-info
-          (ht-set context
-                  "meta-info"
-                  (org-site-generate-meta-info)))
-      (org-site-render "postamble.html" context))))
+(defun org-site-generate-postamble ()
+  (let ((context
+         (ht-from-plist
+          `("footer" ,(org-site-generate-footer)))))
+    (if org-site-enable-meta-info
+        (ht-set context
+                "meta-info"
+                (org-site-generate-meta-info)))
+    (org-site-render "postamble.html" context)))
 
 (provide 'org-site-utils)
 ;;; org-site-utils.el ends here

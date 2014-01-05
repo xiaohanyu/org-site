@@ -7,7 +7,8 @@ ERT_RUNNER ?= ert-runner
 test: unit-tests
 
 unit-tests: elpa
-	${CASK} exec ert-runner -l org-site*.el
+	${CASK} exec ${EMACS} -Q -batch -L . -L test \
+		-l test/org-site-test.el -f ert-run-tests-batch-and-exit
 
 ecukes-features: elpa
 	${CASK} exec ${ECUKES} --no-win
