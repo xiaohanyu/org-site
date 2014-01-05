@@ -13,3 +13,6 @@ tramp
 
 # Cask
 .cask
+
+# elpa
+.elpa
