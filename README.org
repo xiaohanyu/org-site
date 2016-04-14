@@ -3,6 +3,23 @@
 #+EMAIL:     xiaohanyu1988@gmail.com
 #+DATE:      2013-04-10
 
+* Announcement
+
+This project has been stopped as an experimentation to write a static site
+generator with Emacs Lisp. But still, I'll keep the code here, just for demo.
+
+I've found it's not convenient to write such a thing with Emacs Lisp since I
+have to do a lot of hack such as ~defadvice~ and ~with-temp-buffer~, etc to
+match out necessary part from org-mode files.
+
+I've switched to [[http://nanoc.ws/][Nanoc]] for my personal website, which is also used by GitHub for
+its [[https://developer.github.com/][GitHub Developer]] and [[help.github.com][GitHub Help]].
+
+If you still want a org-mode elisp-based solution, then [[https://github.com/kelvinh/org-page][org-page]] may be the only
+choice.
+
+Thanks.
+
 * Introduction
 Org-site is a static site generator based on Emacs
 [[http://orgmode.org][org-mode]]. http://xiaohanyu.github.io/org-site/ provide a sample [[http://pages.github.com][GitHub Pages]]
